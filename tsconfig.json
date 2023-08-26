@@ -23,10 +23,7 @@
         // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
         "resolveJsonModule": true /* Include modules imported with .json extension. */,
         "baseUrl": "./",
-        "paths": {
-            "Src/*": ["src/*"],
-            "Config/*": ["config/*"]
-        },
+        // "paths": {},
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "sourceMap": true,
