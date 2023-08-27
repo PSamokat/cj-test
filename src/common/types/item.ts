@@ -6,6 +6,6 @@ export type Item = {
 };
 
 export enum ItemType {
-    FOLDER = 'folder',
-    FILE = 'file'
+    FOLDER = 'Folder',
+    FILE = 'Sequence'
 }

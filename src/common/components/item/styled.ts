@@ -9,7 +9,7 @@ interface ContainerProps {
 interface DropdownProps {
     isOpen?: boolean;
 }
-interface ActionButtons {
+interface ActionButtonsProps {
     isSelected?: boolean;
 }
 export const Info = styled('div')`
@@ -17,6 +17,11 @@ export const Info = styled('div')`
     align-items: center;
     gap: 6px;
     padding: 8px 0;
+`;
+
+export const Button = styled('button')`
+    display: flex;
+    align-items: center;
 `;
 
 export const SelectMarker = styled('div')<SelectMarkerProps>`
@@ -46,11 +51,11 @@ export const ItemName = styled('div')`
   color: #CECECE;
 `;
 
-export const ActionButtons = styled('div')<ActionButtons>`
+export const ActionButtons = styled('div')<ActionButtonsProps>`
   visibility: ${({ isSelected }) => (isSelected ? 'visible' : 'hidden')};
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
   padding: 8px 0;
 `;
 
@@ -58,7 +63,8 @@ export const Container = styled('div')<ContainerProps>`
     display: flex;
     justify-content: space-between;
     height: 34px;
-    padding-right: 10px;
+    padding-right: 20px;
+    margin-bottom: 2px;
     border-radius: 3px;
     background-color: ${({ isSelected }) => (isSelected ? '#343434' : 'none')};
     &:hover {

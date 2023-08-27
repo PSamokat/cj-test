@@ -1,51 +1,57 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-    AddBox, Delete, Folder, MovieCreationOutlined,
+    Delete, Folder, MovieCreationOutlined,
 } from '@mui/icons-material';
 import ChevronIcon from 'src/common/assets/chevron.svg';
 import { ItemType } from 'src/common/types/item';
 import { RootState } from 'src/store';
 
+import AddMenu from '../add-menu';
+import { ModalContext } from '../file-manager';
+
 import {
-    ActionButtons, Container, Dropdown, Info, ItemName, Nested, SelectMarker,
+    ActionButtons,
+    Button,
+    Container,
+    Dropdown,
+    Info,
+    ItemName,
+    Nested,
+    SelectMarker,
 } from './styled';
 
 interface ItemProps {
     selfId?: string;
     name?: string;
     type?: ItemType;
-    selectedIdHook: [string, React.Dispatch<React.SetStateAction<string>>];
+    selectedId?: string;
+    onSelect?: (id: string) => void;
 }
 
 const Item: React.FC<ItemProps> = ({
     selfId,
     type,
     name,
-    selectedIdHook: [selectedId, setSelectedId],
+    onSelect,
+    selectedId,
 }) => {
     const [isOpenNestedSequence, setIsOpenNestedSequence] = useState<boolean>(false);
-    const isItemSelect = selectedId === selfId;
     const nestedFiles = useSelector((state: RootState) =>
         state.fileManager.items.filter((item) => item.parentId === selfId));
-    const handleOnOpenNestedFiles = () => {
-        setIsOpenNestedSequence((prevIsOpen) => !prevIsOpen);
-    };
-    const handleOnSelectSequence = () => {
-        setSelectedId(selfId);
-    };
+    const isSelected = !selectedId.localeCompare(selfId);
+    const modalContext = useContext(ModalContext);
 
     return (
         <React.Fragment>
-            <Container isSelected={ isItemSelect } onClick={ handleOnSelectSequence }>
+            <Container isSelected={ isSelected } onClick={ () => onSelect(selfId) }>
                 <Info>
-                    <SelectMarker isSelected={ isItemSelect } />
-
+                    <SelectMarker isSelected={ isSelected } />
                     { type === ItemType.FOLDER ? (
                         <React.Fragment>
                             <Folder sx={ { color: '#CECECE', fontSize: 14 } } />
                             <Dropdown
-                                onClick={ handleOnOpenNestedFiles }
+                                onClick={ () => setIsOpenNestedSequence((prevIsOpen) => !prevIsOpen) }
                                 isOpen={ isOpenNestedSequence }
                             >
                                 <img src={ ChevronIcon } alt="dropdown" />
@@ -56,9 +62,13 @@ const Item: React.FC<ItemProps> = ({
                     ) }
                     <ItemName>{ name }</ItemName>
                 </Info>
-                <ActionButtons isSelected={ isItemSelect }>
-                    <AddBox sx={ { color: '#CECECE', fontSize: 14 } } />
-                    <Delete sx={ { color: '#CECECE', fontSize: 14 } } />
+                <ActionButtons isSelected={ isSelected }>
+                    { type === ItemType.FOLDER && (
+                        <AddMenu />
+                    ) }
+                    <Button onClick={ () => modalContext.setIsDeleteItemModalVisible(true) }>
+                        <Delete sx={ { color: '#CECECE', fontSize: 14 } } />
+                    </Button>
                 </ActionButtons>
             </Container>
             { isOpenNestedSequence && (
@@ -68,7 +78,8 @@ const Item: React.FC<ItemProps> = ({
                             selfId={ item.id }
                             name={ item.name }
                             type={ item.type }
-                            selectedIdHook={ [selectedId, setSelectedId] }
+                            selectedId={ selectedId }
+                            onSelect={ onSelect }
                         />
                     )) }
                 </Nested>
