@@ -1,6 +1,11 @@
 import styled from '@emotion/styled/macro';
 
-export const ModalWindow = styled('div')`
+interface ModalWindowProps {
+    isVisible?: boolean;
+}
+
+export const ModalWindow = styled('div')<ModalWindowProps>`
+    visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
     position: absolute;
     top: 0;
     left: 0;

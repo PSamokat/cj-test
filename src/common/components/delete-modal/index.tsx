@@ -18,19 +18,22 @@ import {
     ModalWindow,
 } from './styled';
 
-const DeleteItemModal: React.FC = () => {
+interface DeleteItemModalProps {
+    isVisible: boolean;
+}
+
+const DeleteItemModal: React.FC<DeleteItemModalProps> = ({ isVisible }) => {
     const modalContext = useContext(ModalContext);
     const dispatch = useDispatch();
     const files = useSelector((state: RootState) => state.fileManager.items);
     const itemPath = useMemo(() => findItemPath(files, modalContext.itemId), [modalContext.itemId]);
-
     const handleOnDeleteItem = () => {
         dispatch(itemsActions.deleteItem({ idToRemove: modalContext.itemId }));
         modalContext.setIsDeleteItemModalVisible(false);
     };
 
     return (
-        <ModalWindow>
+        <ModalWindow isVisible={ isVisible }>
             <ModalDialog>
                 <ModalIcon>
                     <img src={ deleteIcon } alt="delete" />

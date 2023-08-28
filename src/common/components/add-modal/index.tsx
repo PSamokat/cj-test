@@ -1,4 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, {
+    useContext, useEffect, useMemo, useRef, useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddBox, Folder, MovieCreationOutlined } from '@mui/icons-material';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -23,10 +25,15 @@ import {
     RootPath,
 } from './styled';
 
-const AddItemModal: React.FC = () => {
+interface AddItemModalProps {
+    isVisible: boolean;
+}
+
+const AddItemModal: React.FC<AddItemModalProps> = ({ isVisible }) => {
     const [itemName, setItemName] = useState<string>('');
     const modalContext = useContext(ModalContext);
     const dispatch = useDispatch();
+    const inputRef = useRef<HTMLInputElement>();
     const files = useSelector((state: RootState) => state.fileManager.items);
     const rootFolder = useMemo(
         () => files.find((item) => item.id === modalContext.itemId),
@@ -41,8 +48,14 @@ const AddItemModal: React.FC = () => {
         }));
     };
 
+    useEffect(() => {
+        if (isVisible) {
+            inputRef.current.focus();
+        }
+    }, [isVisible]);
+
     return (
-        <ModalWindow>
+        <ModalWindow isVisible={ isVisible }>
             <ModalDialog>
                 <Header>
                     <Path>
@@ -67,6 +80,7 @@ const AddItemModal: React.FC = () => {
                         <Folder sx={ { color: '#626262' } } />
                     ) }
                     <Input
+                        ref={ inputRef }
                         value={ itemName }
                         onChange={ (event) => setItemName(event.target.value) }
                         placeholder={ `Enter ${modalContext?.addItemModalContext?.addItemType} name` }

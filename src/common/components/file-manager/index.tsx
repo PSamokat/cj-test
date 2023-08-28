@@ -73,8 +73,8 @@ const FileManager: React.FC = () => {
                         onSelect={ handleItemSelect }
                     />
                 )) }
-                { isDeleteItemModalVisible && <DeleteItemModal /> }
-                { addItemModalContext.isAddModalVisible && <AddItemModal /> }
+                <DeleteItemModal isVisible={ isDeleteItemModalVisible } />
+                <AddItemModal isVisible={ addItemModalContext.isAddModalVisible } />
             </ModalContext.Provider>
         </Container>
     );
