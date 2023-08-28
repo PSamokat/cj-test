@@ -5,7 +5,7 @@ import AddMenu from 'src/common/components/add-menu';
 import { ModalContext } from 'src/common/components/file-manager';
 import { useSelectorFactory } from 'src/common/hooks/selector-factory';
 import { ItemType } from 'src/common/types/item';
-import { childDirsSelector } from 'src/store/file-manager/selectiors';
+import { childDirsSelector } from 'src/store/file-manager/selectors';
 
 import {
     ActionButtons,

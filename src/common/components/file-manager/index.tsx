@@ -7,7 +7,7 @@ import AddItemModal from 'src/common/components/add-modal';
 import DeleteItemModal from 'src/common/components/delete-modal';
 import Item from 'src/common/components/item';
 import { ItemType } from 'src/common/types/item';
-import { rootDirsSelector } from 'src/store/file-manager/selectiors';
+import { rootDirsSelector } from 'src/store/file-manager/selectors';
 
 import { AddFolderButton, Container } from './styled';
 
