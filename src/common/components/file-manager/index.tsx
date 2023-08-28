@@ -1,5 +1,5 @@
 import React, {
-    createContext, useCallback, useMemo, useState,
+    createContext, useCallback, useState,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { AddBox } from '@mui/icons-material';
@@ -7,8 +7,7 @@ import AddItemModal from 'src/common/components/add-modal';
 import DeleteItemModal from 'src/common/components/delete-modal';
 import Item from 'src/common/components/item';
 import { ItemType } from 'src/common/types/item';
-import { compareItemsFn } from 'src/common/utils/items-helpers';
-import { RootState } from 'src/store';
+import { rootDirsSelector } from 'src/store/file-manager/selectiors';
 
 import { AddFolderButton, Container } from './styled';
 
@@ -26,13 +25,7 @@ interface ModalContextType {
 export const ModalContext = createContext<ModalContextType>({});
 
 const FileManager: React.FC = () => {
-    const files = useSelector((state: RootState) => state.fileManager.items);
-    const rootFiles = useMemo(
-        () => files
-            .filter((item) => !item.parentId)
-            .sort(compareItemsFn),
-        [files.length],
-    );
+    const rootDirs = useSelector(rootDirsSelector);
     const [selectedId, setSelectedId] = useState<string | null>('');
     const [addItemModalContext, setAddItemModalContext] = useState<AddItemModalContextType>({});
     const [isDeleteItemModalVisible, setIsDeleteItemModalVisible] = useState<boolean>(false);
@@ -63,7 +56,7 @@ const FileManager: React.FC = () => {
                     <AddBox sx={ { color: '#CECECE', fontSize: 14 } } />
                     <div>Add Folder</div>
                 </AddFolderButton>
-                { rootFiles.map((file) => (
+                { rootDirs.map((file) => (
                     <Item
                         key={ file.id }
                         type={ file.type }

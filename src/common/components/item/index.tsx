@@ -1,12 +1,11 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext, useState } from 'react';
 import { Delete, Folder, MovieCreationOutlined } from '@mui/icons-material';
 import ChevronIcon from 'src/common/assets/chevron.svg';
 import AddMenu from 'src/common/components/add-menu';
 import { ModalContext } from 'src/common/components/file-manager';
+import { useSelectorFactory } from 'src/common/hooks/selector-factory';
 import { ItemType } from 'src/common/types/item';
-import { compareItemsFn } from 'src/common/utils/items-helpers';
-import { RootState } from 'src/store';
+import { childDirsSelector } from 'src/store/file-manager/selectiors';
 
 import {
     ActionButtons,
@@ -31,14 +30,7 @@ const Item: React.FC<ItemProps> = ({
     selfId, type, name, onSelect, selectedId,
 }) => {
     const [isOpenNestedSequence, setIsOpenNestedSequence] = useState<boolean>(false);
-    const files = useSelector((state: RootState) => state.fileManager.items);
-    const nestedFiles = useMemo(
-        () =>
-            files
-                .filter((item) => item.parentId === selfId)
-                .sort(compareItemsFn),
-        [selfId, files.length],
-    );
+    const childDirs = useSelectorFactory(() => childDirsSelector(selfId), [selfId]);
     const isSelected = !selectedId.localeCompare(selfId);
     const modalContext = useContext(ModalContext);
 
@@ -53,7 +45,7 @@ const Item: React.FC<ItemProps> = ({
                             <Dropdown
                                 onClick={ () => setIsOpenNestedSequence((prevIsOpen) => !prevIsOpen) }
                                 isOpen={ isOpenNestedSequence }
-                                isVisible={ !!nestedFiles.length }
+                                isVisible={ !!childDirs.length }
                             >
                                 <img src={ ChevronIcon } alt="dropdown" />
                             </Dropdown>
@@ -72,7 +64,7 @@ const Item: React.FC<ItemProps> = ({
             </Container>
             { isOpenNestedSequence && (
                 <Nested>
-                    { nestedFiles.map((item) => (
+                    { childDirs.map((item) => (
                         <Item
                             key={ item.id }
                             selfId={ item.id }

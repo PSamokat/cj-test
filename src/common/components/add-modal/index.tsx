@@ -8,8 +8,7 @@ import ChevronIcon from 'src/common/assets/chevron.svg';
 import { ModalContext } from 'src/common/components/file-manager';
 import { ItemType } from 'src/common/types/item';
 import { RootState } from 'src/store';
-
-import { itemsActions } from '../../../store/slices/file-manager';
+import { itemsActions } from 'src/store/file-manager/slice';
 
 import {
     CloseButton,

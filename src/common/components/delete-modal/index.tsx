@@ -4,8 +4,7 @@ import deleteIcon from 'src/common/assets/bin.svg';
 import { ModalContext } from 'src/common/components/file-manager';
 import { findItemPath } from 'src/common/utils/items-helpers';
 import { RootState } from 'src/store';
-
-import { itemsActions } from '../../../store/slices/file-manager';
+import { itemsActions } from 'src/store/file-manager/slice';
 
 import {
     ActionButtons,
