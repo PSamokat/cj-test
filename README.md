@@ -9,6 +9,7 @@
 
 ### и используются библиотеки:
 - **react-redux** - Redux Toolkit
+- **reselect**
 - **@emotion** - css-in-js, styled component
 - **@mui/icons-material**
 - **uuid**

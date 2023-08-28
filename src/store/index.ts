@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import fileManager from 'src/store/slices/file-manager';
+import fileManager from 'src/store/file-manager/slice';
 
 const rootReducer = combineReducers({
     fileManager,

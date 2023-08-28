@@ -23,7 +23,7 @@ const initialState: InitialState = {
     items: mockItems,
 };
 
-const fileManager = createSlice({
+const slice = createSlice({
     name: 'items',
     initialState,
     reducers: {
@@ -41,6 +41,6 @@ const fileManager = createSlice({
     },
 });
 
-export const itemsActions = fileManager.actions;
+export const itemsActions = slice.actions;
 
-export default fileManager.reducer;
+export default slice.reducer;
