@@ -4,10 +4,10 @@ import { RootState } from 'src/store/index';
 
 const selectItems = (state: RootState) => state.fileManager.items;
 
-export const rootDirsSelector = createSelector(selectItems, (items) =>
+export const selectRootDirs = createSelector(selectItems, (items) =>
     items.filter((item) => !item.parentId));
 
-export function childDirsSelector(id: string) {
+export function selectChildDirs(id: string) {
     return createSelector(selectItems, (items) =>
         items
             .filter((item) => item.parentId === id)

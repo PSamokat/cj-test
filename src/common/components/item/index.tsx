@@ -5,7 +5,7 @@ import AddMenu from 'src/common/components/add-menu';
 import { ModalContext } from 'src/common/components/file-manager';
 import { useSelectorFactory } from 'src/common/hooks/selector-factory';
 import { ItemType } from 'src/common/types/item';
-import { childDirsSelector } from 'src/store/file-manager/selectors';
+import { selectChildDirs } from 'src/store/file-manager/selectors';
 
 import {
     ActionButtons,
@@ -30,7 +30,7 @@ const Item: React.FC<ItemProps> = ({
     selfId, type, name, onSelect, selectedId,
 }) => {
     const [isOpenNestedSequence, setIsOpenNestedSequence] = useState<boolean>(false);
-    const childDirs = useSelectorFactory(() => childDirsSelector(selfId), [selfId]);
+    const childDirs = useSelectorFactory(() => selectChildDirs(selfId), [selfId]);
     const isSelected = !selectedId.localeCompare(selfId);
     const modalContext = useContext(ModalContext);
 

@@ -7,7 +7,7 @@ import AddItemModal from 'src/common/components/add-modal';
 import DeleteItemModal from 'src/common/components/delete-modal';
 import Item from 'src/common/components/item';
 import { ItemType } from 'src/common/types/item';
-import { rootDirsSelector } from 'src/store/file-manager/selectors';
+import { selectRootDirs } from 'src/store/file-manager/selectors';
 
 import { AddFolderButton, Container } from './styled';
 
@@ -25,7 +25,7 @@ interface ModalContextType {
 export const ModalContext = createContext<ModalContextType>({});
 
 const FileManager: React.FC = () => {
-    const rootDirs = useSelector(rootDirsSelector);
+    const rootDirs = useSelector(selectRootDirs);
     const [selectedId, setSelectedId] = useState<string | null>('');
     const [addItemModalContext, setAddItemModalContext] = useState<AddItemModalContextType>({});
     const [isDeleteItemModalVisible, setIsDeleteItemModalVisible] = useState<boolean>(false);
