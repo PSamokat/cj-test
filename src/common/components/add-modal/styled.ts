@@ -55,7 +55,9 @@ export const RootFolderName = styled('div')`
 `;
 
 export const CloseButton = styled('button')`
-    transform: translate(25%, -25%);
+    position: relative;
+    top: -5px;
+    left: 5px;
 `;
 
 export const ItemName = styled('div')`
@@ -91,4 +93,12 @@ export const ConfirmButton = styled('button')`
     border-radius: 3px;
     background-color: #e08855;
     color: #333333;
+    transition: all 0.1s ease-in-out;
+    &:hover {
+        background-color: #c2744a;
+        &:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 8px 40px 0 rgba(0, 0, 0, 0.3);
+        }
+    }
 `;

@@ -1,11 +1,11 @@
-export type Item = {
+export interface Item {
     id: string;
     parentId: string | null;
     name: string;
     type: ItemType;
-};
+}
 
 export enum ItemType {
     FOLDER = 'Folder',
-    FILE = 'Sequence'
+    FILE = 'Sequence',
 }

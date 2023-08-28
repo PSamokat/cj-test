@@ -2,9 +2,8 @@ import React, {
     forwardRef, Ref, useContext, useEffect, useRef, useState,
 } from 'react';
 import { AddBox, Folder, MovieCreationOutlined } from '@mui/icons-material';
-
-import { ItemType } from '../../types/item';
-import { ModalContext } from '../file-manager';
+import { ModalContext } from 'src/common/components/file-manager';
+import { ItemType } from 'src/common/types/item';
 
 import {
     AddButton, Label, Menu, MenuButton,
@@ -42,19 +41,20 @@ const AddMenu = forwardRef<any, AddMenuProps>(({ isOpen, setIsOpen }, ref) => {
         <React.Fragment>
             <AddButton onClick={ () => setIsOpen((prevIsOpen) => !prevIsOpen) }>
                 <AddBox sx={ { color: '#CECECE', fontSize: 14 } } />
+                { isOpen && (
+                    <Menu ref={ ref } isOpen={ isOpen }>
+                        <MenuButton onClick={ handleOnAddFolder }>
+                            <Folder sx={ { color: '#CECECE', fontSize: 14 } } />
+                            <Label>Add Folder</Label>
+                        </MenuButton>
+                        <MenuButton onClick={ handleOnAddSequence }>
+                            <MovieCreationOutlined sx={ { color: '#CECECE', fontSize: 14 } } />
+                            <Label>Add Sequence</Label>
+                        </MenuButton>
+                    </Menu>
+                ) }
             </AddButton>
-            { isOpen && (
-                <Menu ref={ ref } isOpen={ isOpen }>
-                    <MenuButton onClick={ handleOnAddFolder }>
-                        <Folder sx={ { color: '#CECECE', fontSize: 14 } } />
-                        <Label>Add Folder</Label>
-                    </MenuButton>
-                    <MenuButton onClick={ handleOnAddSequence }>
-                        <MovieCreationOutlined sx={ { color: '#CECECE', fontSize: 14 } } />
-                        <Label>Add Sequence</Label>
-                    </MenuButton>
-                </Menu>
-            ) }
+
         </React.Fragment>
     );
 });

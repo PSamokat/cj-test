@@ -14,10 +14,11 @@ export const Container = styled('div')`
 
 export const Sidebar = styled('div')<SidebarProps>`
     min-width: 300px;
-    min-height: 100vh;
+    height: 100vh;
     background-color: #232323;
     width: ${({ width }) => `${width}px`};
-    overflow: hidden;
+    overflow: auto;
+    scrollbar-width: thin;
 `;
 
 export const Content = styled('div')`
@@ -27,9 +28,8 @@ export const Content = styled('div')`
 
 export const Resizer = styled('div')`
     width: 4px;
-    height: 20px;
+    height: 100vh;
     align-self: center;
     cursor: ew-resize;
-    background: #4f4f4f;
     transform: translateX(-2px);
 `;

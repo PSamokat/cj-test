@@ -1,14 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    Delete, Folder, MovieCreationOutlined,
-} from '@mui/icons-material';
+import { Delete, Folder, MovieCreationOutlined } from '@mui/icons-material';
 import ChevronIcon from 'src/common/assets/chevron.svg';
+import AddMenu from 'src/common/components/add-menu';
+import { ModalContext } from 'src/common/components/file-manager';
 import { ItemType } from 'src/common/types/item';
+import { compareItemsFn } from 'src/common/utils/items-helpers';
 import { RootState } from 'src/store';
-
-import AddMenu from '../add-menu';
-import { ModalContext } from '../file-manager';
 
 import {
     ActionButtons,
@@ -30,15 +28,17 @@ interface ItemProps {
 }
 
 const Item: React.FC<ItemProps> = ({
-    selfId,
-    type,
-    name,
-    onSelect,
-    selectedId,
+    selfId, type, name, onSelect, selectedId,
 }) => {
     const [isOpenNestedSequence, setIsOpenNestedSequence] = useState<boolean>(false);
-    const nestedFiles = useSelector((state: RootState) =>
-        state.fileManager.items.filter((item) => item.parentId === selfId));
+    const files = useSelector((state: RootState) => state.fileManager.items);
+    const nestedFiles = useMemo(
+        () =>
+            files
+                .filter((item) => item.parentId === selfId)
+                .sort(compareItemsFn),
+        [selfId, files.length],
+    );
     const isSelected = !selectedId.localeCompare(selfId);
     const modalContext = useContext(ModalContext);
 
@@ -53,6 +53,7 @@ const Item: React.FC<ItemProps> = ({
                             <Dropdown
                                 onClick={ () => setIsOpenNestedSequence((prevIsOpen) => !prevIsOpen) }
                                 isOpen={ isOpenNestedSequence }
+                                isVisible={ !!nestedFiles.length }
                             >
                                 <img src={ ChevronIcon } alt="dropdown" />
                             </Dropdown>
@@ -63,9 +64,7 @@ const Item: React.FC<ItemProps> = ({
                     <ItemName>{ name }</ItemName>
                 </Info>
                 <ActionButtons isSelected={ isSelected }>
-                    { type === ItemType.FOLDER && (
-                        <AddMenu />
-                    ) }
+                    { type === ItemType.FOLDER && <AddMenu /> }
                     <Button onClick={ () => modalContext.setIsDeleteItemModalVisible(true) }>
                         <Delete sx={ { color: '#CECECE', fontSize: 14 } } />
                     </Button>
@@ -75,6 +74,7 @@ const Item: React.FC<ItemProps> = ({
                 <Nested>
                     { nestedFiles.map((item) => (
                         <Item
+                            key={ item.id }
                             selfId={ item.id }
                             name={ item.name }
                             type={ item.type }

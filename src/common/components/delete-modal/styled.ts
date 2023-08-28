@@ -30,6 +30,8 @@ export const ModalIcon = styled('div')`
 `;
 
 export const ItemPath = styled('div')`
+    width: 80%;
+    text-align: center;
     margin-top: 41px;
     font-size: 16px;
     font-weight: 600;
@@ -66,8 +68,13 @@ export const CancelButton = styled('button')`
     line-height: 20px;
     background-color: #393939;
     color: #cecece;
+    transition: all 0.1s ease-in-out;
     &:hover {
         background-color: #424242;
+        &:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 8px 40px 0 rgba(0, 0, 0, 0.3);
+        }
     }
 `;
 
@@ -83,7 +90,12 @@ export const ConfirmButton = styled('button')`
     line-height: 20px;
     background-color: #5e3838;
     color: #db5c5c;
+    transition: all 0.1s ease-in-out;
     &:hover {
         background-color: #6b2f2f;
+        &:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 8px 40px 0 rgba(0, 0, 0, 0.3);
+        }
     }
 `;

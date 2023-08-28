@@ -1,12 +1,13 @@
-import React, { useContext, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddBox, Folder, MovieCreationOutlined } from '@mui/icons-material';
 import ClearIcon from '@mui/icons-material/Clear';
+import ChevronIcon from 'src/common/assets/chevron.svg';
+import { ModalContext } from 'src/common/components/file-manager';
+import { ItemType } from 'src/common/types/item';
+import { RootState } from 'src/store';
 
-import { RootState } from '../../../store';
-import ChevronIcon from '../../assets/chevron.svg';
-import { ItemType } from '../../types/item';
-import { ModalContext } from '../file-manager';
+import { itemsActions } from '../../../store/slices/file-manager';
 
 import {
     CloseButton,
@@ -23,12 +24,22 @@ import {
 } from './styled';
 
 const AddItemModal: React.FC = () => {
+    const [itemName, setItemName] = useState<string>('');
     const modalContext = useContext(ModalContext);
+    const dispatch = useDispatch();
     const files = useSelector((state: RootState) => state.fileManager.items);
     const rootFolder = useMemo(
         () => files.find((item) => item.id === modalContext.itemId),
         [modalContext.itemId],
     );
+    const handleOnAddItem = () => {
+        modalContext.setAddItemModalContext({ isAddModalVisible: false });
+        dispatch(itemsActions.addItem({
+            name: itemName,
+            type: modalContext.addItemModalContext.addItemType,
+            parentId: rootFolder?.id ? rootFolder.id : null,
+        }));
+    };
 
     return (
         <ModalWindow>
@@ -37,7 +48,7 @@ const AddItemModal: React.FC = () => {
                     <Path>
                         <RootPath>
                             <Folder sx={ { color: '#CECECE', fontSize: 14 } } />
-                            <RootFolderName>{ rootFolder?.name }</RootFolderName>
+                            <RootFolderName>{ rootFolder?.name || 'PROJECT' }</RootFolderName>
                         </RootPath>
                         <img src={ ChevronIcon } alt="dropdown" />
                         New { modalContext?.addItemModalContext?.addItemType }
@@ -56,12 +67,14 @@ const AddItemModal: React.FC = () => {
                         <Folder sx={ { color: '#626262' } } />
                     ) }
                     <Input
+                        value={ itemName }
+                        onChange={ (event) => setItemName(event.target.value) }
                         placeholder={ `Enter ${modalContext?.addItemModalContext?.addItemType} name` }
                         autoFocus={ true }
                     />
                 </ItemName>
                 <Footer>
-                    <ConfirmButton>
+                    <ConfirmButton onClick={ handleOnAddItem }>
                         <AddBox sx={ { color: '#333333' } } />
                         Add { modalContext?.addItemModalContext?.addItemType }
                     </ConfirmButton>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
+import FileManager from 'src/common/components/file-manager';
 
-import FileManager from './file-manager';
 import {
     Application, Container, Content, Resizer, Sidebar,
 } from './styled';

@@ -1,10 +1,11 @@
 import React, { useContext, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from 'src/common/assets/bin.svg';
 import { ModalContext } from 'src/common/components/file-manager';
+import { findItemPath } from 'src/common/utils/items-helpers';
+import { RootState } from 'src/store';
 
-import { RootState } from '../../../store';
-import { Item } from '../../types/item';
+import { itemsActions } from '../../../store/slices/file-manager';
 
 import {
     ActionButtons,
@@ -19,40 +20,14 @@ import {
 
 const DeleteItemModal: React.FC = () => {
     const modalContext = useContext(ModalContext);
+    const dispatch = useDispatch();
     const files = useSelector((state: RootState) => state.fileManager.items);
-    const itemPath = useMemo(() => {
-        const deleteItem = files.find((item) => item.id === modalContext.itemId);
+    const itemPath = useMemo(() => findItemPath(files, modalContext.itemId), [modalContext.itemId]);
 
-        if (!deleteItem) {
-            return null;
-        }
-
-        const idToItemMap: { [id: string]: Item } = {};
-
-        files.forEach((item) => {
-            idToItemMap[item.id] = item;
-        });
-
-        const path: string[] = [deleteItem.name];
-
-        let currentId: string | null = deleteItem.parentId;
-
-        while (currentId !== null) {
-            const parentItem = idToItemMap[currentId];
-
-            if (parentItem) {
-                path.unshift(parentItem.name);
-                currentId = parentItem.parentId;
-            } else {
-                break;
-            }
-        }
-
-        return {
-            path: `PROJECT/${path.join('/')}`,
-            type: deleteItem.type,
-        };
-    }, [modalContext.itemId]);
+    const handleOnDeleteItem = () => {
+        dispatch(itemsActions.deleteItem({ idToRemove: modalContext.itemId }));
+        modalContext.setIsDeleteItemModalVisible(false);
+    };
 
     return (
         <ModalWindow>
@@ -66,7 +41,7 @@ const DeleteItemModal: React.FC = () => {
                     <CancelButton onClick={ () => modalContext.setIsDeleteItemModalVisible(false) }>
                         No, cancel
                     </CancelButton>
-                    <ConfirmButton>Yes, delete</ConfirmButton>
+                    <ConfirmButton onClick={ handleOnDeleteItem }>Yes, delete</ConfirmButton>
                 </ActionButtons>
             </ModalDialog>
         </ModalWindow>
